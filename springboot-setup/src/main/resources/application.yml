@@ -1,0 +1,15 @@
+spring:
+  jooq:
+    sql-dialect: postgres
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: guest
+    password: welcome1
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 30000
+      pool-name: JOOQSpringBootApp
+      max-lifetime: 2000000

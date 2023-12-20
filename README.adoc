@@ -1,0 +1,77 @@
+= jOOQ Masterclass
+
+****
+_A practical guide for Java developers to write SQL queries for complex database interactions, with additional samples in Apache Camel_
+****
+
+== Links
+
+- https://github.com/PacktPublishing/jOOQ-Masterclass[Book GitHub Page]
+
+- https://github.com/quarkiverse/quarkus-jooq[Quarkus JOOQ]
+
+- https://camel.apache.org/components/4.0.x/jooq-component.html#_plain_sql[Apache Camel jOOQ]
+
+== Annotations
+
+* One of most important interfaces of jOOQ is _org.jooq.DSLContext_
+
+.First JOOQ Query Execution
+image::thumb/first-jooq-query-execution.png[]
+
+.Lukas Eder Quote's
+.....
+Using jOOQ with the Code Generator is just
+a little additional setup, but it will help jOOQ to make the right, carefully chosen
+default choices for so many silly edge cases that are so annoying to handle later
+on. I can't recommend it enough!
+.....
+
+- https://github.com/PacktPublishing/jOOQ-Masterclass/tree/master/Chapter02[Chapter02 Github]
+
+.Basic Code-generator MYSQL representation
+[source,xml]
+----
+<plugin>
+	<groupId>org.jooq</groupId>
+	<artifactId>jooq-codegen-maven</artifactId>
+	<executions>
+		<execution>
+			<id>generate-for-mysql</id>
+			<phase>generate-sources</phase>
+			<goals>
+				<goal>generate</goal>
+			</goals>
+			<configuration xmlns = "...">
+				<jdbc>
+					<driver>${spring.datasource.driverClassName}</driver>
+					<url>${spring.datasource.url}</url>
+					<user>${spring.datasource.username}</user>
+					<password>${spring.datasource.password}</password>
+				</jdbc>
+				<generator>
+					<name>org.jooq.codegen.JavaGenerator</name>
+					<database>
+						<name>org.jooq.meta.mysql.MySQLDatabase</name>
+						<inputSchema>classicmodels</inputSchema>
+						<includes>.*</includes>
+						<excludes>
+flyway_schema_history | sequences
+| customer_pgs | refresh_top3_product
+| sale_.* | set_.* | get_.* | .*_master
+</excludes>
+						<schemaVersionProvider>
+SELECT MAX(`version`) FROM `flyway_schema_history`
+</schemaVersionProvider>
+						<logSlowQueriesAfterSeconds></logSlowQueriesAfterSeconds>
+					</database>
+					<target>
+						<packageName>jooq.generated</packageName>
+						<directory>target/generated-sources</directory>
+					</target>
+				</generator>
+			</configuration>
+		</execution>
+	</executions>
+</plugin>
+----
